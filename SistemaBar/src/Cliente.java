@@ -10,15 +10,14 @@ public class Cliente {
 		this.genero = genero;
 	}
 
-	
 	public String getCpf() {
 		return cpf;
 	}
-	
+
 	public int getIdade() {
 		return idade;
 	}
-	
+
 	public String getGenero() {
 		return genero;
 	}
