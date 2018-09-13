@@ -1,4 +1,8 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Sistema {
 	ArrayList<Cliente> clientes;
@@ -8,23 +12,36 @@ public class Sistema {
 	}
 
 	public void registrarEntradaCliente(Cliente c) {
-		if(buscarClienteCpf(c.getCpf()).equals(null)) {
+		if(buscarClienteCpf(c.getCpf()) == null) {
 			clientes.add(c);
-			//escrever no arquivo
+			try {
+				gravarArquivo(c.getCpf(), "Entrada");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else {
-		//escrever no arquivo
+			try {
+				gravarArquivo(c.getCpf(), "Entrada");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public void registrarSaidaCliente(String cpf) {
 		if (!clientes.isEmpty()) {
-			for (Cliente c : clientes) {
-				if (c.getCpf().equals(cpf)) {
+			Cliente c = buscarClienteCpf(cpf);
+			if(c != null) {
 					clientes.remove(c);
-					//escrever no arquivo
-				}
-
-			}
+					try {
+						gravarArquivo(cpf, "Saída");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			}		
 		}
 	}
 
@@ -74,5 +91,42 @@ public class Sistema {
 		return 0;
 
 	}
+	
+	public int quantidadeSocios() {
+		int cont = 0;
+		if (!clientes.isEmpty()) {
+			for (Cliente c : clientes) {
+				if (c instanceof ClienteSocio) {
+					cont++;
+				}
+			}
+			return cont;
+		}
+		return 0;
+	}
+	
+	public int quantidadeNaoSocios() {
+		int cont = 0;
+		if (!clientes.isEmpty()) {
+			for (Cliente c : clientes) {
+				if (!(c instanceof ClienteSocio)) {
+					cont++;
+				}
+			}
+			return cont;
+		}
+		return 0;
+	}
+	
+	
+	public void gravarArquivo(String cpf, String estado) throws IOException {
+		Date d = new Date();
+		BufferedWriter buffWrite = new BufferedWriter(new FileWriter("src\\SistemaBar.txt", true));
+        buffWrite.append(estado + ": " + cpf + " - "+ d.toString());
+        buffWrite.newLine();
+        buffWrite.flush();
+        buffWrite.close();
+ 	}
+	
 
 }
