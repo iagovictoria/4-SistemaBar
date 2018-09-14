@@ -30,19 +30,22 @@ public class Sistema {
 		}
 	}
 
-	public void registrarSaidaCliente(String cpf) {
+	public boolean registrarSaidaCliente(String cpf) {
 		if (!clientes.isEmpty()) {
 			Cliente c = buscarClienteCpf(cpf);
 			if(c != null) {
 					clientes.remove(c);
 					try {
 						gravarArquivo(cpf, "Saída");
+						return true;
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 			}		
 		}
+		
+		return false;
 	}
 
 	public ArrayList<Cliente> listarClientes() {
